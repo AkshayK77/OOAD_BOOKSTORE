@@ -1,0 +1,10 @@
+-- Insert sample books
+INSERT INTO books (title, author, isbn, price, description, category, stock_quantity, format, image_url, created_at, updated_at) VALUES
+('The Great Gatsby', 'F. Scott Fitzgerald', '978-0743273565', 29.99, 'A story of decadence and excess, Gatsby explores the darker aspects of the Jazz Age.', 'Fiction', 50, 'PHYSICAL', 'https://example.com/gatsby.jpg', NOW(), NOW()),
+('1984', 'George Orwell', '978-0451524935', 24.99, 'A dystopian social science fiction novel that examines the consequences of totalitarianism.', 'Science Fiction', 75, 'PHYSICAL', 'https://example.com/1984.jpg', NOW(), NOW()),
+('To Kill a Mockingbird', 'Harper Lee', '978-0446310789', 19.99, 'A powerful story of racial injustice and the loss of innocence in the American South.', 'Fiction', 100, 'PHYSICAL', 'https://example.com/mockingbird.jpg', NOW(), NOW()),
+('The Hobbit', 'J.R.R. Tolkien', '978-0547928227', 34.99, 'Bilbo Baggins is a hobbit who enjoys a comfortable, unambitious life, rarely traveling any farther than his pantry or cellar.', 'Fantasy', 60, 'PHYSICAL', 'https://example.com/hobbit.jpg', NOW(), NOW()),
+('Pride and Prejudice', 'Jane Austen', '978-0141439518', 14.99, 'A classic romance novel that follows the character development of Elizabeth Bennet.', 'Romance', 80, 'PHYSICAL', 'https://example.com/pride.jpg', NOW(), NOW()),
+('The Catcher in the Rye', 'J.D. Salinger', '978-0316769488', 22.99, 'A story of teenage alienation and loss of innocence in New York City.', 'Fiction', 45, 'PHYSICAL', 'https://example.com/catcher.jpg', NOW(), NOW()),
+('Dune', 'Frank Herbert', '978-0441172719', 39.99, 'Set on the desert planet Arrakis, Dune is the story of the boy Paul Atreides.', 'Science Fiction', 30, 'PHYSICAL', 'https://example.com/dune.jpg', NOW(), NOW()),
+('The Lord of the Rings', 'J.R.R. Tolkien', '978-0544003415', 49.99, 'An epic high-fantasy novel that follows the quest to destroy the One Ring.', 'Fantasy', 40, 'PHYSICAL', 'https://example.com/lotr.jpg', NOW(), NOW()); x
