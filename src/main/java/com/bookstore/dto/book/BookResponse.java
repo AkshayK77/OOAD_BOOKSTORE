@@ -33,6 +33,9 @@ public class BookResponse {
     @Schema(description = "Description of the book", example = "A story of decadence and excess...")
     private String description;
     
+    @Schema(description = "URL of the book's cover image", example = "/images/book1.jpg")
+    private String imageUrl;
+    
     @Schema(description = "Average rating of the book", example = "4.5")
     private Double averageRating;
     

@@ -1,29 +1,60 @@
-# Bookstore Application
+# Online Bookstore Application
 
-A full-stack Java and React application for managing a bookstore.
+A full-stack e-commerce application for an online bookstore built with Spring Boot and React.
 
-## Running the Application
+## Features
+
+- User authentication and authorization
+- Book catalog browsing with search and filtering
+- Shopping cart functionality
+- Order management
+- Admin panel for product and order management
+- Payment processing simulation
+
+## Technology Stack
 
 ### Backend
-
-1. Start the backend server:
-   ```
-   cd catesh
-   mvn spring-boot:run
-   ```
-
-2. To run without initializing data (in case of duplicate key errors):
-   ```
-   mvn spring-boot:run -Dspring-boot.run.arguments=--spring.sql.init.mode=never
-   ```
+- Java 11+
+- Spring Boot
+- Spring Security with JWT
+- Spring Data JPA
+- MySQL Database
+- Maven
 
 ### Frontend
+- React
+- Redux for state management
+- Material-UI components
+- Axios for API calls
 
-1. Start the frontend application:
-   ```
-   cd frontend
-   npm start
-   ```
+## Project Structure
+
+- `/src` - Backend Java code
+- `/frontend` - React frontend application
+
+## Getting Started
+
+### Prerequisites
+- JDK 11 or newer
+- Maven
+- Node.js and npm
+- MySQL
+
+### Running the Backend
+```bash
+mvn spring-boot:run
+```
+
+### Running the Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+
+## API Documentation
+
+The API documentation is available at `/swagger-ui.html` when the application is running.
 
 ## Admin Access
 

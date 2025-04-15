@@ -48,7 +48,6 @@ public class SecurityConfig {
     @Bean
     public LogoutHandler logoutHandler() {
         return (request, response, authentication) -> {
-            // Simple logout handler that does nothing
             SecurityContextHolder.clearContext();
         };
     }
@@ -59,7 +58,14 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(req -> 
-                req.requestMatchers("/**").permitAll() // Allow all paths to be accessed publicly for testing
+                req.requestMatchers("/api/auth/**").permitAll() // Public authentication endpoints
+                   .requestMatchers("/api/books").permitAll() // Public book listing
+                   .requestMatchers("/api/books/search/**").permitAll() // Public book search
+                   .requestMatchers("/api/books/{id}").permitAll() // Public book details
+                   .requestMatchers("/api/orders").authenticated() // Order endpoints require authentication
+                   .requestMatchers("/api/orders/**").authenticated() // All order endpoints require just authentication
+                   .requestMatchers("/api/users/current").authenticated() // Current user endpoint requires authentication
+                   .anyRequest().permitAll() // For demonstration, allow other requests
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider)
@@ -99,10 +105,21 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*"); // Allow all origins
+        // Allow frontend origins with multiple port options
+        configuration.addAllowedOrigin("http://localhost:3000"); // React dev server
+        configuration.addAllowedOrigin("http://127.0.0.1:3000"); // Alternative localhost
+        configuration.addAllowedOrigin("http://localhost:8080"); // In case frontend runs on 8080
+        configuration.addAllowedOrigin("http://localhost:8081"); // In case frontend runs on 8081
+        configuration.addAllowedOrigin("http://localhost:8082"); // In case frontend runs on 8082
+        configuration.addAllowedOrigin("http://localhost:8083"); // In case frontend runs on 8083
+        
+        // Allow all methods and headers
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
-        configuration.addAllowedHeader("*"); // Allow all headers
-        configuration.setAllowCredentials(false); // Don't allow credentials
+        configuration.addAllowedHeader("*"); // Allow all headers including Authorization
+        
+        // Enable credentials for auth
+        configuration.setAllowCredentials(true); // Allow credentials for secure requests
+        configuration.setMaxAge(3600L); // Cache preflight requests for 1 hour
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

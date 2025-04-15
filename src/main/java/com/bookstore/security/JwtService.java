@@ -11,8 +11,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -78,12 +82,45 @@ public class JwtService {
     }
     
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            System.out.println("Attempting to parse JWT token: " + token.substring(0, Math.min(10, token.length())) + "...");
+            Claims claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            System.out.println("Successfully parsed JWT token");
+            return claims;
+        } catch (ExpiredJwtException e) {
+            System.err.println("JWT token expired: " + e.getMessage());
+            // Return empty claims with expiration information
+            Claims emptyClaims = Jwts.claims();
+            emptyClaims.put("error", "Token expired");
+            return emptyClaims;
+        } catch (MalformedJwtException e) {
+            System.err.println("Malformed JWT token: " + e.getMessage());
+            // Return empty claims with error information
+            Claims emptyClaims = Jwts.claims();
+            emptyClaims.put("error", "Malformed token");
+            return emptyClaims;
+        } catch (UnsupportedJwtException e) {
+            System.err.println("Unsupported JWT token: " + e.getMessage());
+            Claims emptyClaims = Jwts.claims();
+            emptyClaims.put("error", "Unsupported token format");
+            return emptyClaims;
+        } catch (SignatureException e) {
+            System.err.println("Invalid JWT signature: " + e.getMessage());
+            Claims emptyClaims = Jwts.claims();
+            emptyClaims.put("error", "Invalid signature");
+            return emptyClaims;
+        } catch (Exception e) {
+            System.err.println("Error parsing JWT token: " + e.getMessage());
+            // Return empty claims to avoid null pointer exceptions
+            Claims emptyClaims = Jwts.claims();
+            emptyClaims.put("error", "Token processing error");
+            return emptyClaims;
+        }
     }
     
     private Key getSignInKey() {

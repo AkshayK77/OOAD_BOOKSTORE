@@ -27,4 +27,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     
     @Query("SELECT o FROM Order o WHERE o.user = ?1 AND o.paymentStatus = ?2")
     List<Order> findByUserAndPaymentStatus(User user, String paymentStatus);
+
+    @Query("SELECT COUNT(oi) > 0 FROM OrderItem oi WHERE oi.book.id = :bookId")
+    boolean existsByBookId(Long bookId);
+    
+    @Query("SELECT COUNT(oi) > 0 FROM OrderItem oi WHERE oi.book.id = :bookId AND oi.order.status != 'COMPLETED'")
+    boolean existsByBookIdAndIncompleteOrder(Long bookId);
 } 

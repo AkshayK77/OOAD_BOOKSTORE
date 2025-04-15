@@ -41,6 +41,7 @@ public class BookMapper {
         response.setFormat(book.getFormat());
         response.setDescription(book.getDescription());
         response.setInStock(book.getStockQuantity() > 0);
+        response.setImageUrl(book.getImageUrl());
         return response;
     }
     

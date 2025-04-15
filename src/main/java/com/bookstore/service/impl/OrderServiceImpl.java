@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bookstore.dto.order.OrderRequest;
 import com.bookstore.entity.User;
+import com.bookstore.exception.BusinessException;
 import com.bookstore.exception.ResourceNotFoundException;
 import com.bookstore.mapper.OrderMapper;
 import com.bookstore.model.Book;
@@ -55,8 +56,38 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order createOrder(OrderRequest orderRequest, User user) {
-        Order order = orderMapper.toEntity(orderRequest, user);
-        return orderRepository.save(order);
+        try {
+            // First check stock availability for all items
+            for (OrderRequest.OrderItemRequest itemRequest : orderRequest.getOrderItems()) {
+                Book book = bookService.findById(itemRequest.getBookId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Book", "id", itemRequest.getBookId().toString()));
+                
+                if (book.getStockQuantity() < itemRequest.getQuantity()) {
+                    throw new BusinessException("Insufficient stock for book: " + book.getTitle());
+                }
+            }
+            
+            // If all stock checks pass, create the order
+            Order order = orderMapper.toEntity(orderRequest, user);
+            
+            // Set appropriate initial statuses
+            order.setStatus("PENDING");
+            order.setPaymentStatus("PENDING");
+            
+            Order savedOrder = orderRepository.save(order);
+            
+            // Don't update stock yet - we'll do that when payment is confirmed
+            // This prevents stock reduction for orders that are never paid
+            
+            return savedOrder;
+        } catch (ResourceNotFoundException e) {
+            throw e; // Re-throw to be handled by controller
+        } catch (BusinessException e) {
+            throw e; // Re-throw to be handled by controller
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException("Failed to create order: " + e.getMessage());
+        }
     }
     
     @Override
@@ -159,6 +190,12 @@ public class OrderServiceImpl implements OrderService {
     public void cancelOrder(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Order not found"));
+        
+        // Check if payment is completed - prevent cancellation of paid orders
+        if ("COMPLETED".equals(order.getPaymentStatus())) {
+            throw new IllegalStateException("Cannot cancel an order that has been paid for");
+        }
+        
         order.setStatus("CANCELLED");
         orderRepository.save(order);
     }

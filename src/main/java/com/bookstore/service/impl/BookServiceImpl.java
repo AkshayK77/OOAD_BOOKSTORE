@@ -9,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bookstore.dto.book.BookRequest;
 import com.bookstore.dto.book.BookResponse;
+import com.bookstore.exception.BusinessException;
 import com.bookstore.exception.ResourceNotFoundException;
 import com.bookstore.mapper.BookMapper;
 import com.bookstore.model.Book;
 import com.bookstore.repository.BookRepository;
+import com.bookstore.repository.OrderRepository;
 import com.bookstore.service.BookService;
 import com.bookstore.service.ReviewService;
 
@@ -25,6 +27,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final ReviewService reviewService;
+    private final OrderRepository orderRepository;
     
     @Override
     @Transactional
@@ -77,8 +80,14 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public void deleteBook(Long id) {
         if (!bookRepository.existsById(id)) {
-            throw new IllegalStateException("Book not found");
+            throw new ResourceNotFoundException("Book", "id", id);
         }
+        
+        // Check if the book is referenced by any orders
+        if (orderRepository.existsByBookId(id)) {
+            throw new BusinessException("This book is referenced by orders and cannot be deleted");
+        }
+        
         bookRepository.deleteById(id);
     }
     

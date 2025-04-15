@@ -58,8 +58,16 @@ public class OrderMapper {
     public OrderResponse toResponse(Order order) {
         OrderResponse response = new OrderResponse();
         response.setId(order.getId());
-        response.setUserId(order.getUser().getId());
-        response.setUsername(order.getUser().getUsername());
+        
+        // Handle null user (guest checkout)
+        if (order.getUser() != null) {
+            response.setUserId(order.getUser().getId());
+            response.setUsername(order.getUser().getEmail());
+        } else {
+            response.setUserId(null);
+            response.setUsername("Guest");
+        }
+        
         response.setOrderItems(order.getOrderItems().stream()
             .map(this::toOrderItemResponse)
             .collect(Collectors.toList()));

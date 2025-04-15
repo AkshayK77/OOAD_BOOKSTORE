@@ -1,18 +1,64 @@
-### Java ###
+# Java / Spring Boot
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 *.class
-*.log
 *.jar
 *.war
-*.nar
 *.ear
-*.zip
-*.tar.gz
-*.rar
-hs_err_pid*
-replay_pid*
+.apt_generated
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.DS_Store
+
+# Node / React
+node_modules/
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+frontend/coverage/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# IDEs and editors
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+OOAD_BOOKSTORE/
+src/OOAD_BOOKSTORE/
 
 ### Maven ###
-target/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -21,37 +67,21 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
 
 ### Spring Boot ###
 spring-boot-starter/
 spring-boot-devtools/
 
 ### IDE ###
-.idea/
-*.iws
-*.iml
-*.ipr
-.vscode/
-*.code-workspace
-.classpath
-.project
-.settings/
-.factorypath
-.sts4-cache/
-.springBeans
+*.log
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
 
 ### Node ###
-node_modules/
 /dist/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 ### Logs ###
-logs/
-*.log
-
-### System specific ###
-.DS_Store
 Thumbs.db 
