@@ -1,3 +1,18 @@
+# This file intentionally has minimal exclusions
+# to allow pushing everything to GitHub
+
+# Only exclude temporary system files
+.DS_Store
+Thumbs.db
+
+# This is intentionally empty to include all files in the repository
+# Uncomment entries below if you want to exclude them later
+
+# node_modules/
+# target/
+# .idea/
+# .vscode/
+
 # Java / Spring Boot
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -13,7 +28,6 @@ target/
 .settings
 .springBeans
 .sts4-cache
-.DS_Store
 
 # Node / React
 node_modules/
